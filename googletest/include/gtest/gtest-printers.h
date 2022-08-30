@@ -200,17 +200,23 @@ namespace internal_stream_operator_without_lexical_name_lookup {
 struct LookupBlocker {};
 void operator<<(LookupBlocker, LookupBlocker);
 
+template <class T>
+concept has_stream_operator = requires(std::ostream& stream, T const& a) {
+  // Only accept types for which we
+  // can find a streaming operator
+  // via ADL (possibly involving
+  // implicit conversions).
+  stream << a;
+};
+
 struct StreamPrinter {
-  template <typename T,
-            // Don't accept member pointers here. We'd print them via implicit
-            // conversion to bool, which isn't useful.
-            typename = typename std::enable_if<
-                !std::is_member_pointer<T>::value>::type,
-            // Only accept types for which we can find a streaming operator via
-            // ADL (possibly involving implicit conversions).
-            typename = decltype(std::declval<std::ostream&>()
-                                << std::declval<const T&>())>
-  static void PrintValue(const T& value, ::std::ostream* os) {
+  template <typename T>
+  requires
+      // Don't accept member pointers here. We'd print them via implicit
+      // conversion to bool, which isn't useful.
+      (!std::is_member_pointer<T>::value &&
+       has_stream_operator<T>) static void PrintValue(const T& value,
+                                                      ::std::ostream* os) {
     // Call streaming operator found by ADL, possibly with implicit conversions
     // of the arguments.
     *os << value;
