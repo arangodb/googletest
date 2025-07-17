@@ -43,6 +43,14 @@
 #include <sys/stat.h>
 #include <windows.h>
 
+// #define read _read
+// #define write _write
+#define close _close
+// #define fdopen _fdopen
+#define dup _dup
+#define dup2 _dup2
+#define creat _creat
+
 #include <map>  // Used in ThreadLocal.
 #ifdef _MSC_VER
 #include <crtdbg.h>
