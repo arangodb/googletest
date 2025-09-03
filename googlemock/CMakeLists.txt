@@ -162,6 +162,10 @@ if (gmock_build_tests)
   cxx_test(gmock_link_test gmock_main test/gmock_link2_test.cc)
   cxx_test(gmock_test gmock_main)
 
+  if(WIN32)
+    add_compile_definitions(GTEST_HAS_PTHREAD=0)
+  endif()
+
   if (DEFINED GTEST_HAS_PTHREAD)
     cxx_test(gmock_stress_test gmock)
   endif()
