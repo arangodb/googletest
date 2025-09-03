@@ -65,6 +65,10 @@ endif()
 # call it again here.
 config_compiler_and_linker()  # from ${gtest_dir}/cmake/internal_utils.cmake
 
+if(WIN32)
+  add_compile_definitions(GTEST_HAS_PTHREAD=0)
+endif()
+
 # Adds Google Mock's and Google Test's header directories to the search path.
 set(gmock_build_include_dirs
   "${gmock_SOURCE_DIR}/include"

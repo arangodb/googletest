@@ -60,7 +60,7 @@ macro(config_compiler_and_linker)
   # Note: pthreads on MinGW is not supported, even if available
   # instead, we use windows threading primitives
   unset(GTEST_HAS_PTHREAD)
-  if (NOT gtest_disable_pthreads AND NOT MINGW)
+  if (NOT gtest_disable_pthreads AND NOT MINGW AND NOT WIN32)
     # Defines CMAKE_USE_PTHREADS_INIT and CMAKE_THREAD_LIBS_INIT.
     find_package(Threads)
     if (CMAKE_USE_PTHREADS_INIT)
